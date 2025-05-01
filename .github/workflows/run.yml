@@ -21,18 +21,17 @@ jobs:
           python-version: '3.9'
       - name: Install dependencies
         run: |
+          ls -alh
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run onforall
         run: |
-          #python onforall.py --target example.com run 
-          #等其它参数
-          #后期多个项目融合后不需要用这个了，直接运行最终工具的 main.py
           python run.py
 
       - name: Compress results directory
         run: |
+          ls -alh
           tar -czvf result.tar.gz results
           ls -alh
           
