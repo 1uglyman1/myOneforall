@@ -8,7 +8,6 @@ import warnings
 
 # 禁用所有警告信息
 warnings.filterwarnings("ignore")
-
 # 路径设置
 relative_directory = pathlib.Path(__file__).parent.parent  # OneForAll代码相对路径
 module_dir = relative_directory.joinpath('modules')  # OneForAll模块目录
@@ -54,20 +53,20 @@ brute_concurrent_num = 2000  # 并发查询数量(默认2000，最大推荐10000
 brute_socket_num = 1  # 爆破时每个进程下的socket数量
 brute_resolve_num = 15  # 解析失败时尝试换名称服务器重查次数
 # 爆破所使用的字典路径(默认None则使用data/subdomains.txt，自定义字典请使用绝对路径)
-brute_wordlist_path = None
+brute_wordlist_path = data_storage_dir.joinpath('subnames_big.txt')
 use_china_nameservers = False  # 使用中国域名服务器 如果你所在网络不在中国则建议设置False
 # 域名的权威DNS名称服务器的保存路径 当域名开启了泛解析时会使用该名称服务器来进行A记录查询
 authoritative_dns_path = data_storage_dir.joinpath('authoritative_dns.txt')
-enable_recursive_brute = False  # 是否使用递归爆破(默认False)
+enable_recursive_brute = True  # 是否使用递归爆破(默认False)
 brute_recursive_depth = 3  # 递归爆破深度(默认2层)
 # 爆破下一层子域所使用的字典路径(默认None则使用data/subnames_next.txt，自定义字典请使用绝对路径)
-recursive_nextlist_path = None
+recursive_nextlist_path = data_storage_dir.joinpath('subnames_big.txt')
 enable_check_dict = False  # 是否开启字典配置检查提示(默认False)
 delete_generated_dict = True  # 是否删除爆破时临时生成的字典(默认True)
 delete_massdns_result = True  # 是否删除爆破时massdns输出的解析结果 (默认True)
 only_save_valid = True  # 是否在处理爆破结果时只存入解析成功的子域
 check_time = 10  # 检查字典配置停留时间(默认10秒)
-enable_fuzz = False  # 是否使用fuzz模式枚举域名
+enable_fuzz = True  # 是否使用fuzz模式枚举域名
 fuzz_place = None  # 指定爆破的位置 指定的位置用`@`表示 示例：www.@.example.com
 fuzz_rule = None  # fuzz域名使用的正则表达式 示例：'[a-z][0-9]' 表示第一位是字母 第二位是数字
 fuzz_list = None  # fuzz域名使用的字典路径

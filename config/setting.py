@@ -19,7 +19,7 @@ enable_finder_module = True  # 开启finder模块,开启会从响应体和JS中�
 enable_altdns_module = True  # 开启altdns模块,开启会利用置换技术重组子域再次发现新子域(默认True)
 enable_cdn_check = True  # 开启cdn检查模块(默认True)
 enable_banner_identify = True  # 开启WEB指纹识别模块(默认True)
-enable_takeover_check = False  # 开启子域接管风险检查(默认False)
+enable_takeover_check = True  # 开启子域接管风险检查(默认False)
 # HTTP请求子域的端口范围 参数可选值有 'small', 'medium', 'large'
 http_request_port = 'small'  # 请求端口范围(默认 'small'，表示请求子域的80,443端口)
 # 参数可选值True，False分别表示导出存活，全部子域结果
@@ -38,13 +38,13 @@ enable_partial_module = []  # 启用部分收集模块 必须禁用enable_all_mo
 # 爆破模块设置
 brute_concurrent_num = 2000  # 爆破时并发查询数量(默认2000，最大推荐10000)
 # 爆破所使用的字典路径(默认None则使用data/subdomains.txt，自定义字典请使用绝对路径)
-brute_wordlist_path = None
-use_china_nameservers = True  # 使用中国域名服务器 如果你所在网络不在中国则建议设置False
-enable_recursive_brute = False  # 是否使用递归爆破(默认False)
+brute_wordlist_path = data_storage_dir.joinpath('subnames_big.txt')
+use_china_nameservers = False  # 使用中国域名服务器 如果你所在网络不在中国则建议设置False
+enable_recursive_brute = True  # 是否使用递归爆破(默认False)
 brute_recursive_depth = 2  # 递归爆破深度(默认2层)
 # 爆破下一层子域所使用的字典路径(默认None则使用data/subnames_next.txt，自定义字典请使用绝对路径)
-recursive_nextlist_path = None
-enable_check_dict = False  # 是否开启字典配置检查提示(默认False)
+recursive_nextlist_path = data_storage_dir.joinpath('subnames_big.txt')
+enable_check_dict = True  # 是否开启字典配置检查提示(默认False)
 delete_generated_dict = True  # 是否删除爆破时临时生成的字典(默认True)
 #  是否删除爆破时massdns输出的解析结果 (默认True)
 #  massdns输出的结果中包含更详细解析结果
@@ -98,5 +98,5 @@ enable_random_ua = True  # 使用随机UA(默认True，开启可以覆盖request
 
 
 # 搜索模块设置
-enable_recursive_search = False  # 递归搜索子域
+enable_recursive_search = True  # 递归搜索子域
 search_recursive_times = 2  # 递归搜索层数

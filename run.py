@@ -30,7 +30,7 @@ ext  文件后缀
 def find_file(name,ext='txt',target_dir='results'):
     current_dir = os.getcwd()
     print(current_dir)
-    current_dir+="\\"+target_dir
+    current_dir+="/"+target_dir
     print(current_dir)
     # 存储找到的文件路径
     found_files = []
@@ -59,7 +59,7 @@ def find_file(name,ext='txt',target_dir='results'):
 
 def run_oneforall(file):
     current_path=os.getcwd()
-    current_path+="\\"+file
+    current_path+="/"+file
     try:
         command = f'python oneforall.py --targets {file} -alive True --port medium run '
         subprocess.run(command, shell=True, check=True)
@@ -90,7 +90,7 @@ def run_nmap_scan(target, options='-A', ports='1-65535', xml_output_file='scan_r
 
     """
     current_path=os.getcwd()
-    current_path+="\\scan_results.xml"
+    current_path+="/scan_results.xml"
     try:
         print(banner)
         command = f'nmap {options} -p {ports} {target} -oX {xml_output_file}'
@@ -111,7 +111,7 @@ def run_nmap_scan(target, options='-A', ports='1-65535', xml_output_file='scan_r
 """
 def convert_nmap_xml_to_csv(xml_file='scan_results.xml', csv_file='scan_results.csv'):
     try:
-        csv_file="results\\"+csv_file
+        csv_file="results/"+csv_file
         # 解析 XML 文件
         tree = ET.parse(xml_file)
         root = tree.getroot()
