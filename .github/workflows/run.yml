@@ -1,0 +1,49 @@
+name: OneForAll for subdomain, port scan and Upload Results
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  scan-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run onforall
+        run: |
+          #python onforall.py --target example.com run 
+          #等其它参数
+          #后期多个项目融合后不需要用这个了，直接运行最终工具的 main.py
+          python run.py
+
+      - name: Compress results directory
+        run: |
+          tar -czvf result.tar.gz results
+          ls -alh
+          
+      - name: Upload compressed results
+        uses: actions/upload-artifact@v4
+        with:
+          name: oneforall-results
+          path: result.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
+    
