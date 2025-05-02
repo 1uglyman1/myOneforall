@@ -38,12 +38,12 @@ enable_partial_module = []  # 启用部分收集模块 必须禁用enable_all_mo
 # 爆破模块设置
 brute_concurrent_num = 2000  # 爆破时并发查询数量(默认2000，最大推荐10000)
 # 爆破所使用的字典路径(默认None则使用data/subdomains.txt，自定义字典请使用绝对路径)
-brute_wordlist_path = data_storage_dir.joinpath('subnames_big.txt')
+brute_wordlist_path =None # data_storage_dir.joinpath('subnames_big.txt')
 use_china_nameservers = False  # 使用中国域名服务器 如果你所在网络不在中国则建议设置False
 enable_recursive_brute = True  # 是否使用递归爆破(默认False)
 brute_recursive_depth = 2  # 递归爆破深度(默认2层)
 # 爆破下一层子域所使用的字典路径(默认None则使用data/subnames_next.txt，自定义字典请使用绝对路径)
-recursive_nextlist_path = data_storage_dir.joinpath('subnames_big.txt')
+recursive_nextlist_path =None #data_storage_dir.joinpath('subnames_big.txt')
 enable_check_dict = True  # 是否开启字典配置检查提示(默认False)
 delete_generated_dict = True  # 是否删除爆破时临时生成的字典(默认True)
 #  是否删除爆破时massdns输出的解析结果 (默认True)

@@ -6,6 +6,58 @@ import csv
 import platform
 import requests
 import shutil
+import psutil
+
+def get_cpu_info():
+    """获取 CPU 信息"""
+    cpu_info = {}
+    cpu_info['cpu_count'] = psutil.cpu_count(logical=False)
+    cpu_info['cpu_count_logical'] = psutil.cpu_count(logical=True)
+    cpu_info['cpu_freq'] = psutil.cpu_freq().current
+    return cpu_info
+
+
+def get_memory_info():
+    """获取内存信息"""
+    memory_info = {}
+    memory = psutil.virtual_memory()
+    memory_info['total_memory'] = memory.total
+    memory_info['available_memory'] = memory.available
+    memory_info['used_memory'] = memory.used
+    memory_info['memory_percent'] = memory.percent
+    return memory_info
+
+
+def get_disk_info():
+    """获取磁盘信息"""
+    disk_info = {}
+    disk = psutil.disk_usage('/')
+    disk_info['total_disk'] = disk.total
+    disk_info['used_disk'] = disk.used
+    disk_info['free_disk'] = disk.free
+    disk_info['disk_percent'] = disk.percent
+    return disk_info
+
+
+def get_network_info():
+    """获取网络信息"""
+    network_info = {}
+    network = psutil.net_io_counters()
+    network_info['bytes_sent'] = network.bytes_sent
+    network_info['bytes_recv'] = network.bytes_recv
+    return network_info
+
+
+def get_system_info():
+    """获取系统信息"""
+    system_info = {}
+    system_info['system'] = platform.system()
+    system_info['node'] = platform.node()
+    system_info['release'] = platform.release()
+    system_info['version'] = platform.version()
+    system_info['machine'] = platform.machine()
+    system_info['processor'] = platform.processor()
+    return system_info
 
 def upload_results():
     current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -62,7 +114,7 @@ def run_oneforall(file):
     current_path=os.getcwd()
     current_path+="/"+file
     try:
-        command = f'python oneforall.py --targets {file} -alive True --port medium run '
+        command = f'python oneforall.py --targets {file}  --threads 50 -alive True  run '
         subprocess.run(command, shell=True, check=True)
         print("OneForAll 扫描任务执行成功")
     except subprocess.CalledProcessError as e:
@@ -81,7 +133,7 @@ def run_oneforall(file):
 没有使用nmap  -iL targets.txt 读取文件扫描，使用的单个ip扫描 就感觉这样好些
 
 """
-def run_nmap_scan(target, options='-A', ports='1-65535', xml_output_file='scan_results.xml'):
+def run_nmap_scan(target, options='-v -F --min-rate 300 --max-rate 800 -T4', ports='1-65535', xml_output_file='scan_results.xml'):
     banner="""
          __      _   __      ___      ___          __                __       __     ( )   __      ___    
   //   ) ) // ) )  ) ) //   ) ) //   ) )     //  ) ) //   / / //   ) ) //   ) ) / / //   ) ) //   ) ) 
@@ -94,7 +146,8 @@ def run_nmap_scan(target, options='-A', ports='1-65535', xml_output_file='scan_r
     current_path+="/scan_results.xml"
     try:
         print(banner)
-        command = f'nmap {options} -v -p {ports} {target} -oX {xml_output_file}'
+        command = f'nmap {options}  {target} -oX {xml_output_file}'
+        print(command)
         subprocess.run(command, shell=True, check=True)
         print(f'Nmap 扫描完成，结果已保存到 {xml_output_file}')
         return current_path
@@ -319,6 +372,26 @@ def install_nmap_windows():
     return True
 
 if __name__ == '__main__':
+    try:
+        print("""
+        ++++++++++++++system info +++++++++++++++++
+        
+        """)
+        print("系统信息:", get_system_info())
+        print("CPU 信息:", get_cpu_info())
+        print("内存信息:", get_memory_info())
+        print("磁盘信息:", get_disk_info())
+        print("网络信息:", get_network_info())
+    except Exception as e:
+        print("""
+        ++++++++++++error++++++++++++++++
+        print("系统信息:", get_system_info())
+        print("CPU 信息:", get_cpu_info())
+        print("内存信息:", get_memory_info())
+        print("磁盘信息:", get_disk_info())
+        print("网络信息:", get_network_info())
+        
+        """)
     run_oneforall("xxxsrc.txt")
     print("""
     只能用于多域名时才有存在all_subdomain_result_*.txt这个文件，
