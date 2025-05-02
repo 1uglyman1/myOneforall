@@ -233,14 +233,14 @@ def convert_nmap_xml_to_csv(xml_file='scan_results.xml', csv_file='scan_results.
 :param csv_file: 输出的 CSV 文件路径，默认为 all_scan_results.csv
 :return: 若转换成功返回 True，否则返回 False
 """
-def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml', csv_file='all_scan_results.csv'):
+def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml',domain, csv_file='all_scan_results.csv'):
     try:
         csv_file = "results/" + csv_file
         # 解析 XML 文件
         tree = ET.parse(xml_file)
         root = tree.getroot()
         # 准备 CSV 文件的表头
-        csv_headers = ['IP', 'Port', 'State', 'Service', 'Product', 'Version', 'OS', 'Script Output']
+        csv_headers = ['IP','domain', 'Port', 'State', 'Service', 'Product', 'Version', 'OS', 'Script Output']
         # 打开 CSV 文件并写入表头
         with open(csv_file, mode='a', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=csv_headers)
@@ -272,6 +272,7 @@ def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml', csv_file='all_
                     # 写入一行数据到 CSV 文件
                     writer.writerow({
                         'IP': ip,
+                        'domain':domain
                         'Port': port_id,
                         'State': state,
                         'Service': service.get('name', '') if service else '',
@@ -372,26 +373,6 @@ def install_nmap_windows():
     return True
 
 if __name__ == '__main__':
-    try:
-        print("""
-        ++++++++++++++system info +++++++++++++++++
-        
-        """)
-        print("系统信息:", get_system_info())
-        print("CPU 信息:", get_cpu_info())
-        print("内存信息:", get_memory_info())
-        print("磁盘信息:", get_disk_info())
-        print("网络信息:", get_network_info())
-    except Exception as e:
-        print("""
-        ++++++++++++error++++++++++++++++
-        print("系统信息:", get_system_info())
-        print("CPU 信息:", get_cpu_info())
-        print("内存信息:", get_memory_info())
-        print("磁盘信息:", get_disk_info())
-        print("网络信息:", get_network_info())
-        
-        """)
     run_oneforall("xxxsrc.txt")
     print("""
     只能用于多域名时才有存在all_subdomain_result_*.txt这个文件，
@@ -409,14 +390,14 @@ if __name__ == '__main__':
                 try:
                     xml_path = run_nmap_scan(line)
                     convert_nmap_xml_to_csv(xml_path)
-                    parse_nmap_xml_and_append_to_csv(xml_path)
+                    parse_nmap_xml_and_append_to_csv(xml_path,line)
                 except Exception as e:
                     print("this machine do not has nmap ")
                     install_nmap_linux()  # 里面有windwos安装
                     try:
                         xml_path = run_nmap_scan(line)
                         convert_nmap_xml_to_csv(xml_path)
-                        parse_nmap_xml_and_append_to_csv(xml_path)
+                        parse_nmap_xml_and_append_to_csv(xml_path,line)
                     except Exception as e:
                         print("this machine do not has nmap ")
                         break
