@@ -318,6 +318,10 @@ def install_nmap_windows():
 
 if __name__ == '__main__':
     run_oneforall("xxxsrc.txt")
+    print("""
+    只能用于多域名时才有存在all_subdomain_result_*.txt这个文件，
+    
+    """)
     subdomain=find_file("all_subdomain_result_","txt","results")
     try:
         # 以只读模式打开文件
@@ -327,18 +331,20 @@ if __name__ == '__main__':
                 # 去除每行末尾的换行符
                 line = line.strip()
                 print(line)
-                xml_path = run_nmap_scan(line)
                 try:
+                    xml_path = run_nmap_scan(line)
                     convert_nmap_xml_to_csv(xml_path)
                     parse_nmap_xml_and_append_to_csv(xml_path)
                 except Exception as e:
                     print("this machine do not has nmap ")
                     install_nmap_linux()  # 里面有windwos安装
                     try:
+                        xml_path = run_nmap_scan(line)
                         convert_nmap_xml_to_csv(xml_path)
                         parse_nmap_xml_and_append_to_csv(xml_path)
                     except Exception as e:
                         print("this machine do not has nmap ")
+                        break
     except FileNotFoundError:
         print(f"文件 {file_path} 未找到。")
     except Exception as e:
