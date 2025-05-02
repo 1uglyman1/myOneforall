@@ -29,6 +29,7 @@ ext  文件后缀
 '''
 def find_file(name,ext='txt',target_dir='results'):
     current_dir = os.getcwd()
+    ret_current_dir = os.getcwd()
     print(current_dir)
     current_dir+="/"+target_dir
     print(current_dir)
@@ -51,7 +52,7 @@ def find_file(name,ext='txt',target_dir='results'):
         print("找到以下文件：")
         for file in found_files:
             print(file)
-            return current_dir+file
+            return ret_current_dir+"/"+file
     else:
         print("未找到符合条件的文件。")
         return None
@@ -93,7 +94,7 @@ def run_nmap_scan(target, options='-A', ports='1-65535', xml_output_file='scan_r
     current_path+="/scan_results.xml"
     try:
         print(banner)
-        command = f'nmap {options} -p {ports} {target} -oX {xml_output_file}'
+        command = f'nmap {options} -v -p {ports} {target} -oX {xml_output_file}'
         subprocess.run(command, shell=True, check=True)
         print(f'Nmap 扫描完成，结果已保存到 {xml_output_file}')
         return current_path
@@ -181,6 +182,7 @@ def convert_nmap_xml_to_csv(xml_file='scan_results.xml', csv_file='scan_results.
 """
 def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml', csv_file='all_scan_results.csv'):
     try:
+        csv_file = "results/" + csv_file
         # 解析 XML 文件
         tree = ET.parse(xml_file)
         root = tree.getroot()
