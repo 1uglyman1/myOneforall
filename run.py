@@ -183,10 +183,14 @@ def convert_nmap_xml_to_csv(xml_file='scan_results.xml', csv_file='scan_results.
 
                 # 遍历每个端口
                 for port in host.findall('.//port'):
-                    port_id = port.get('portid')
-                    state = port.find('state').get('state')
-                    service = port.find('service')
-
+                    try:
+                        port_id = port.get('portid')
+                        state = port.find('state').get('state')
+                        service = port.find('service')
+                    except Exception as e:
+                        port_id=""
+                        state=""
+                        service=""
                     # 提取服务信息
                     if service is not None:
                         product = service.get('product', '')
@@ -253,9 +257,14 @@ def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml',domain, csv_fil
 
                 # 遍历每个端口
                 for port in host.findall('.//port'):
-                    port_id = port.get('portid')
-                    state = port.find('state').get('state')
-                    service = port.find('service')
+                    try:
+                        port_id = port.get('portid')
+                        state = port.find('state').get('state')
+                        service = port.find('service')
+                    except Exception as e:
+                        port_id=""
+                        state=""
+                        service=""
 
                     # 提取服务信息
                     if service is not None:
