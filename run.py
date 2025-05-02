@@ -237,7 +237,7 @@ def convert_nmap_xml_to_csv(xml_file='scan_results.xml', csv_file='scan_results.
 :param csv_file: 输出的 CSV 文件路径，默认为 all_scan_results.csv
 :return: 若转换成功返回 True，否则返回 False
 """
-def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml',domain, csv_file='all_scan_results.csv'):
+def parse_nmap_xml_and_append_to_csv(domain,xml_file='scan_results.xml', csv_file='all_scan_results.csv'):
     try:
         csv_file = "results/" + csv_file
         # 解析 XML 文件
@@ -281,7 +281,7 @@ def parse_nmap_xml_and_append_to_csv(xml_file='scan_results.xml',domain, csv_fil
                     # 写入一行数据到 CSV 文件
                     writer.writerow({
                         'IP': ip,
-                        'domain':domain
+                        'domain':domain,
                         'Port': port_id,
                         'State': state,
                         'Service': service.get('name', '') if service else '',
@@ -399,14 +399,14 @@ if __name__ == '__main__':
                 try:
                     xml_path = run_nmap_scan(line)
                     convert_nmap_xml_to_csv(xml_path)
-                    parse_nmap_xml_and_append_to_csv(xml_path,line)
+                    parse_nmap_xml_and_append_to_csv(line,xml_path)
                 except Exception as e:
                     print("this machine do not has nmap ")
                     install_nmap_linux()  # 里面有windwos安装
                     try:
                         xml_path = run_nmap_scan(line)
                         convert_nmap_xml_to_csv(xml_path)
-                        parse_nmap_xml_and_append_to_csv(xml_path,line)
+                        parse_nmap_xml_and_append_to_csv(line,xml_path)
                     except Exception as e:
                         print("this machine do not has nmap ")
                         break
